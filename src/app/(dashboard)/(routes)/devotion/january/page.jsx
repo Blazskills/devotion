@@ -43,7 +43,7 @@ const JanuaryPage = () => {
   if (devotionMonthDataCount < 1) {
     return (
       <div className="w-full h-full flex flex-col">
-        <p className="m-auto text-green-500 text-lg">No Data...</p>
+        <p className="m-auto text-green-500 text-lg text-center">No Daily Bible Devotion Recorded for {capitalizedMonth}...</p>
       </div>
     );
   }
