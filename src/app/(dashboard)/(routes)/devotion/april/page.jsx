@@ -12,6 +12,8 @@ const AprilPage = () => {
     devotionDataFetch,
     devotionMonthDataError,
     devotionDataMonthFetch,
+    devotionMonthDataLoading,
+    devotionMonthDataCount,
   } = useDevotionContext();
 
   const pathname = usePathname();
@@ -29,17 +31,23 @@ const AprilPage = () => {
   }, [pathname, pathNameMonth, devotionMonthDataError]);
 
   if (devotionMonthDataError) {
-    return <div className="w-full h-full flex flex-col"><p className="m-auto text-red-500 text-lg">Error Loading data...</p></div>;
+    return (
+      <div className="w-full h-full flex flex-col">
+        <p className="m-auto text-red-500 text-lg">Error Loading data...</p>
+      </div>
+    );
   }
 
-  if (devotionMonthData === undefined) {
+  if (devotionMonthDataLoading) {
     return <LoadingState />;
   }
-  if (devotionMonthData?.length < 1) {
-    return <div className="w-full h-full flex flex-col"><p className="m-auto text-green-500 text-lg">No Data...</p></div>;
+  if (devotionMonthDataCount < 1) {
+    return (
+      <div className="w-full h-full flex flex-col">
+        <p className="m-auto text-green-500 text-lg">No Data...</p>
+      </div>
+    );
   }
-
-  
 
   return (
     <div className="px-3 py-5">
