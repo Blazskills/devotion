@@ -1,6 +1,7 @@
 import React from "react";
 
 export const BibleVerses = ({
+  bible_verse_number,
   bible_name,
   bible_chapter,
   bible_from_verse,
@@ -9,6 +10,7 @@ export const BibleVerses = ({
   return (
     <div className="bg-slate-500 w-fit px-5 py-2 rounded-md text-white">
       <p className="min-[768px]:text-[15px] min-[1440px]:text-[16px] text-[17px] capitalize">
+        {bible_verse_number}
         {bible_name}{" "}
       </p>
       <div className="flex space-x-1">

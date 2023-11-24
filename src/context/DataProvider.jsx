@@ -10,11 +10,17 @@ export { DevotionContext };
 
 // eslint-disable-next-line react/prop-types
 export const DevotionContextProvider = ({ children }) => {
+  const currentYear = new Date().getFullYear();
   const [devotionData2, setDevotionData2] = useState();
   const [devotionMonthData, setDevotionMonthData] = useState();
   const [devotionMonthDataError, setDevotionMonthDataError] = useState();
   const [devotionMonthDataLoading, setDevotionMonthDataLoading] = useState();
   const [devotionMonthDataCount, setDevotionMonthDataCount] = useState();
+
+  const [devotionVerseData, setDevotionVerseData] = useState();
+  const [devotionVerseDataError, setDevotionVerseDataError] = useState();
+  const [devotionVerseDataLoading, setDevotionVerseDataLoading] = useState();
+  const [devotionVerseDataCount, setDevotionVerseDataCount] = useState();
   const devotionDataFetch = (pathNameMonth) => {
     const capitalizedMonth =
       pathNameMonth?.charAt(0).toUpperCase() + pathNameMonth?.slice(1);
@@ -71,16 +77,16 @@ export const DevotionContextProvider = ({ children }) => {
         console.log("pathNameMonth is undefined or empty");
         return;
       }
-  
+
       const capitalizedMonth =
         pathNameMonth.charAt(0).toUpperCase() + pathNameMonth.slice(1);
-  
+
       const url =
         process.env.NEXT_PUBLIC_API_URL +
         `/api/v1/devotion/month/list/${capitalizedMonth}/`;
-  
+
       console.log({ capitalizedMonth, pathNameMonth });
-  
+
       setDevotionMonthDataLoading(true);
       const res = await fetch(url, {
         method: "GET",
@@ -89,7 +95,7 @@ export const DevotionContextProvider = ({ children }) => {
         },
         withCredentials: true,
       });
-  
+
       if (res.ok) {
         setDevotionMonthDataLoading(false);
         const response = await res.json();
@@ -109,7 +115,47 @@ export const DevotionContextProvider = ({ children }) => {
       setDevotionMonthDataError(true);
     }
   };
-  
+
+  const devotionDataBibleVersesFetch = async (pathNameMonth, day) => {
+    try {
+      if (!pathNameMonth) {
+        console.log("pathNameMonth is undefined or empty");
+        return;
+      }
+      const url =
+        process.env.NEXT_PUBLIC_API_URL +
+        "/api/v1/devotion/bible/verses/list/" +
+        `${pathNameMonth}/${day}/`;
+      setDevotionVerseDataLoading(true);
+
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      if (res.ok) {
+        setDevotionVerseDataLoading(false);
+
+        const response = await res.json();
+        console.log(response);
+        console.log("Success fetching verses");
+        setDevotionVerseDataCount(response?.count);
+        setDevotionVerseData(response?.results);
+        setDevotionVerseDataError(false);
+      } else {
+        console.log("Failed to fetch verses");
+        setDevotionVerseDataLoading(false);
+        setDevotionVerseDataError(true);
+      }
+      console.log({ pathNameMonth, day });
+    } catch (error) {
+      console.error("Error during fetch:", error);
+      setDevotionVerseDataLoading(false);
+      setDevotionVerseDataError(true);
+    }
+  };
 
   return (
     <DevotionContext.Provider
@@ -122,6 +168,12 @@ export const DevotionContextProvider = ({ children }) => {
         devotionMonthDataError,
         devotionMonthDataLoading,
         devotionMonthDataCount,
+        devotionDataBibleVersesFetch,
+        devotionVerseData,
+        devotionVerseDataError,
+        devotionVerseDataLoading,
+        devotionVerseDataCount,
+        currentYear
       }}
     >
       {children}

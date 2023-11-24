@@ -59,7 +59,7 @@ const JanuaryPage = () => {
           <div className=" grid  max-[280px]:grid-cols-3 max-md:grid-cols-4 min-[768px]:grid-cols-7 lg:grid-cols-10 xl:grid-cols-15 2xl:grid-cols-20 place-items-center gap-y-3">
             {devotionMonthData?.map((month) => (
               <NumberBar
-                key={month?.day}
+                key={month?.id}
                 days={month?.day}
                 month={month?.month}
               />
